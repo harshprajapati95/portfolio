@@ -36,7 +36,7 @@ const Contact = () => {
         <div className="w-full py-16">
             <div className="mb-12">
                 <h2 className="text-5xl font-bold mb-4 text-white">Get In Touch</h2>
-                <div className="w-20 h-1 bg-linear-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -60,14 +60,14 @@ const Contact = () => {
             </div>
 
             {/* CTA Section */}
-            <div className="backdrop-blur-xl bg-linear-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-3xl p-12 text-center">
+            <div className="backdrop-blur-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-3xl p-12 text-center">
                 <h3 className="text-3xl font-bold text-white mb-4">Ready to Work Together?</h3>
                 <p className="text-white/70 mb-8 max-w-2xl mx-auto">
                     I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
                 </p>
                 <a
                     href="mailto:hp6173585@gmail.com"
-                    className="inline-flex items-center gap-2 px-8 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
+                    className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
                 >
                     <FaEnvelope />
                     Send Me an Email

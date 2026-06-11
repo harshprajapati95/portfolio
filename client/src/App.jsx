@@ -16,35 +16,35 @@ function App() {
         <Hero />
         
         {/* About Me Section */}
-        <section id="about" className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-indigo-900 to-slate-900 px-6 py-24">
+        <section id="about" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 px-6 py-24">
           <div className="max-w-6xl w-full">
             <AboutMe />
           </div>
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-24">
+        <section id="skills" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-24">
           <div className="max-w-6xl w-full">
             <Skills />
           </div>
         </section>
 
         {/* Projects Section */}
-        <section id="projects" className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 px-6 py-24">
+        <section id="projects" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-6 py-24">
           <div className="max-w-6xl w-full">
             <Projects />
           </div>
         </section>
 
         {/* Education Section */}
-        <section id="education" className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-24">
+        <section id="education" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-24">
           <div className="max-w-6xl w-full">
             <Education />
           </div>
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-900 via-slate-900 to-slate-900 px-6 py-24">
+        <section id="contact" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-slate-900 px-6 py-24">
           <div className="max-w-6xl w-full">
             <Contact />
           </div>
