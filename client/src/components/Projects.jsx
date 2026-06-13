@@ -54,7 +54,7 @@ const Projects = () => {
         }
     ]
 
-    // Handle vertical scroll to horizontal scroll
+    // Handle vertical scroll to horizontal scroll with snapping
     useEffect(() => {
         const container = containerRef.current
         if (!container) return
@@ -65,17 +65,23 @@ const Projects = () => {
             const elementHeight = element.offsetHeight
             const windowHeight = window.innerHeight
             
-            // Calculate when the section is in viewport
+            // Calculate scroll progress through the section
             const distanceFromTop = window.scrollY + windowHeight - elementTop
-            const sectionProgress = distanceFromTop / (elementHeight + windowHeight)
+            const totalScrollHeight = elementHeight + windowHeight
+            let sectionProgress = distanceFromTop / totalScrollHeight
             
-            // Clamp between 0 and 1, then apply to horizontal scroll
-            const clampedProgress = Math.max(0, Math.min(1, sectionProgress))
-            setScrollProgress(clampedProgress)
+            // Clamp between 0 and 1
+            sectionProgress = Math.max(0, Math.min(1, sectionProgress))
+            
+            // Snap to project increments (divide into sections based on number of projects)
+            const projectCount = projects.length
+            const snappedProgress = Math.round(sectionProgress * (projectCount - 1)) / (projectCount - 1)
+            
+            setScrollProgress(snappedProgress)
             
             if (scrollContainerRef.current) {
                 const scrollWidth = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth
-                scrollContainerRef.current.scrollLeft = scrollWidth * clampedProgress
+                scrollContainerRef.current.scrollLeft = scrollWidth * snappedProgress
             }
         }
 
@@ -84,34 +90,40 @@ const Projects = () => {
     }, [])
 
     return (
-        <div className="w-full" ref={containerRef}>
-            <div className="mb-12">
+        <div 
+            className="w-full" 
+            ref={containerRef}
+            style={{ 
+                minHeight: `${projects.length * 300}vh`
+            }}
+        >
+            <div className="sticky top-0 z-10 mb-12 pt-12 pb-6 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
                 <h2 className="text-5xl font-bold mb-4 text-white">Featured Projects</h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
             </div>
 
             <div 
                 ref={scrollContainerRef}
-                className="flex gap-8 overflow-x-hidden scroll-smooth pb-4"
+                className="sticky top-32 flex gap-12 overflow-x-hidden scroll-smooth pb-4 h-screen"
                 style={{ scrollBehavior: 'smooth' }}
             >
                 {projects.map((project, idx) => (
                     <div
                         key={idx}
-                        className="group flex-shrink-0 w-full lg:w-[500px] xl:w-[600px] backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20"
+                        className="group flex-shrink-0 w-screen lg:w-[90vw] xl:w-[85vw] h-fit backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 flex items-center justify-center"
                     >
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 w-full max-w-3xl">
                             <div className="flex-1">
-                                <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300">
+                                <h3 className="text-4xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300">
                                     {project.title}
                                 </h3>
-                                <p className="text-white/70 text-lg leading-relaxed mb-4">
+                                <p className="text-white/70 text-lg leading-relaxed mb-6">
                                     {project.description}
                                 </p>
 
-                                <div className="mb-4">
-                                    <h4 className="text-sm font-semibold text-white/60 mb-3 uppercase">Key Features</h4>
-                                    <ul className="grid grid-cols-1 gap-2">
+                                <div className="mb-6">
+                                    <h4 className="text-sm font-semibold text-white/60 mb-4 uppercase">Key Features</h4>
+                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         {project.features.map((feature, fIdx) => (
                                             <li key={fIdx} className="text-white/60 text-sm flex items-start gap-2">
                                                 <span className="text-purple-400 mt-1">•</span>
@@ -121,7 +133,7 @@ const Projects = () => {
                                     </ul>
                                 </div>
 
-                                <div className="flex flex-wrap gap-2 mb-6">
+                                <div className="flex flex-wrap gap-3 mb-8">
                                     {project.tech.map((tech, tIdx) => (
                                         <span
                                             key={tIdx}
@@ -132,17 +144,19 @@ const Projects = () => {
                                     ))}
                                 </div>
 
-                                <div className="flex gap-4">
-                                    <a
-                                        href={project.link}
-                                        className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
-                                    >
-                                        <FaExternalLinkAlt size={16} />
-                                        View Project
-                                    </a>
+                                <div className="flex gap-4 flex-wrap">
+                                    {project.link && (
+                                        <a
+                                            href={project.link}
+                                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
+                                        >
+                                            <FaExternalLinkAlt size={16} />
+                                            View Project
+                                        </a>
+                                    )}
                                     <a
                                         href={project.github}
-                                        className="inline-flex items-center gap-2 px-6 py-2 bg-white/10 text-white rounded-lg font-semibold border border-white/20 hover:border-white/40 hover:bg-white/20 transition-all duration-300"
+                                        className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white rounded-lg font-semibold border border-white/20 hover:border-white/40 hover:bg-white/20 transition-all duration-300"
                                     >
                                         <FaGithub size={16} />
                                         Code
