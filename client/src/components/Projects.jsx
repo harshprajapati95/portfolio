@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { FaExternalLinkAlt, FaGithub, FaJava } from 'react-icons/fa'
 import { SiReact, SiNodedotjs, SiPostgresql, SiSpringboot, SiMongodb } from 'react-icons/si'
 
 const Projects = () => {
+    const containerRef = useRef(null)
+    const scrollContainerRef = useRef(null)
+    const [scrollProgress, setScrollProgress] = useState(0)
     const projects = [
         {
             title: 'TrackMint - Finance Management Application',
@@ -51,20 +54,53 @@ const Projects = () => {
         }
     ]
 
+    // Handle vertical scroll to horizontal scroll
+    useEffect(() => {
+        const container = containerRef.current
+        if (!container) return
+
+        const handleScroll = () => {
+            const element = container
+            const elementTop = element.offsetTop
+            const elementHeight = element.offsetHeight
+            const windowHeight = window.innerHeight
+            
+            // Calculate when the section is in viewport
+            const distanceFromTop = window.scrollY + windowHeight - elementTop
+            const sectionProgress = distanceFromTop / (elementHeight + windowHeight)
+            
+            // Clamp between 0 and 1, then apply to horizontal scroll
+            const clampedProgress = Math.max(0, Math.min(1, sectionProgress))
+            setScrollProgress(clampedProgress)
+            
+            if (scrollContainerRef.current) {
+                const scrollWidth = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth
+                scrollContainerRef.current.scrollLeft = scrollWidth * clampedProgress
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
     return (
-        <div className="w-full">
+        <div className="w-full" ref={containerRef}>
             <div className="mb-12">
                 <h2 className="text-5xl font-bold mb-4 text-white">Featured Projects</h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
             </div>
 
-            <div className="space-y-8">
+            <div 
+                ref={scrollContainerRef}
+                className="flex gap-8 overflow-x-hidden scroll-smooth pb-4"
+                style={{ scrollBehavior: 'smooth' }}
+            >
                 {projects.map((project, idx) => (
                     <div
                         key={idx}
-                        className="group backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20"
+                        className="group flex-shrink-0 w-full lg:w-[500px] xl:w-[600px] backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20"
                     >
-                        <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
+                        <div className="flex flex-col gap-6">
                             <div className="flex-1">
                                 <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300">
                                     {project.title}
@@ -75,7 +111,7 @@ const Projects = () => {
 
                                 <div className="mb-4">
                                     <h4 className="text-sm font-semibold text-white/60 mb-3 uppercase">Key Features</h4>
-                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <ul className="grid grid-cols-1 gap-2">
                                         {project.features.map((feature, fIdx) => (
                                             <li key={fIdx} className="text-white/60 text-sm flex items-start gap-2">
                                                 <span className="text-purple-400 mt-1">•</span>
